@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Surprise</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- PAGE 1: CAKE -->
+  <div class="container" id="page1">
+    <h1>Happy Birthday Roselle Racuya 💗</h1>
+    <p class="click-text">Click the cake for your surprise 🎂</p>
+
+    <img
+      src="src/cake.png"
+      class="cake"
+      id="openPage2"
+      alt="Birthday cake"
+      role="button"
+      tabindex="0"
+    >
+  </div>
+
+  <!-- PAGE 2: CHOOSE A SURPRISE -->
+  <div class="container hidden" id="page2">
+    <button class="back-btn" id="backBtn" type="button"
+      onclick="goBack()">← Back</button>
+
+    <h2>These Are for You 💌</h2>
+    <p class="sub">Pick one for a special surprise ✨</p>
+
+    <div class="cards">
+
+      <div class="card music" onclick="openMusic()"
+        role="button" tabindex="0">
+        <img src="src/music.png" alt="Music surprise">
+      </div>
+
+      <div class="card letter" onclick="openLetter()"
+        role="button" tabindex="0">
+        <img src="src/letter.png" alt="Birthday letter">
+      </div>
+
+      <div class="card camera" onclick="opencamera()"
+        role="button" tabindex="0">
+        <img src="src/camera.png" alt="Photo surprise">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SURPRISE MODAL: CLOSE BUTTON ONLY HERE -->
+  <div class="modal hidden" id="modal"
+    role="dialog" aria-modal="true"
+    aria-label="Birthday surprise">
+
+    <div class="modal-box">
+      <button class="close" type="button"
+        onclick="closeModal()" aria-label="Close surprise">×</button>
+
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+<div id="pictureViewer" class="picture-viewer"
+     onclick="closePictureViewer()">
+  <button class="picture-close" aria-label="Close"
+          onclick="event.stopPropagation(); closePictureViewer()">
+    &times;
+  </button>
+
+  <img id="viewerImage" src="" alt="Expanded memory photo"
+       onclick="event.stopPropagation()">
+
+  <p id="viewerCaption"></p>
+  <p class="viewer-hint">Click anywhere outside the photo to close ✨</p>
+</div>
+  <script src="script.js"></script>
+</body>
+</html>
