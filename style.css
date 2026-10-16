@@ -1010,3 +1010,94 @@ h1, h2 {
     transform: scale(1);
   }
 }
+
+/* Falling confetti canvas 🎉 */
+#confettiCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1000;
+  display: block;
+}
+
+
+/* Clickable camera pictures */
+.memory-photo {
+  cursor: zoom-in;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.memory-photo:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* Enlarged picture viewer */
+.picture-viewer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(40, 25, 35, 0.90);
+  backdrop-filter: blur(7px);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 24px;
+  cursor: zoom-out;
+}
+
+.picture-viewer.show {
+  display: flex;
+}
+
+.picture-viewer #viewerImage {
+  max-width: 90vw;
+  max-height: 72vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  padding: 10px;
+  background: #fffaf5;
+  border-radius: 12px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+  cursor: default;
+}
+
+.picture-viewer #viewerCaption {
+  color: #fff5f8;
+  font-size: 1.1rem;
+  text-align: center;
+  margin: 16px 0 4px;
+}
+
+.picture-viewer .viewer-hint {
+  color: #f4dfe8;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.picture-close {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  border: none;
+  background: #fff5f8;
+  color: #8c4566;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .picture-viewer #viewerImage {
+    max-width: 94vw;
+    max-height: 68vh;
+  }
+}
+
+

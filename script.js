@@ -5,14 +5,22 @@ const openBtn = document.getElementById("openPage2");
 
 const modal = document.getElementById("modal");
 const modalContent = document.getElementById("modalContent");
+const pageSound = document.getElementById("pageSound");
 
 // ========================================
-// PAGE NAVIGATION
+// PAGE NAVIGATION AND BACKGROUND SOUND
 // ========================================
 
 function openPageTwo() {
   page1.classList.add("hidden");
   page2.classList.remove("hidden");
+
+  // Start background music when the cake is clicked.
+  if (pageSound) {
+    pageSound.play().catch(() => {
+      console.log("The browser needs a user interaction to play audio.");
+    });
+  }
 }
 
 if (openBtn) {
@@ -73,6 +81,16 @@ audio.addEventListener("pause", () => {
 });
 
 function openMusic() {
+  // Stop the background sound.
+  if (pageSound) {
+    pageSound.pause();
+    pageSound.currentTime = 0;
+  }
+
+  // Stop any song that was previously playing.
+  audio.pause();
+  audio.currentTime = 0;
+
   modalContent.innerHTML = `
     <div class="music-player">
       <img id="cover" class="cover" alt="Song cover">
@@ -82,19 +100,31 @@ function openMusic() {
       <p id="artist"></p>
 
       <div class="controls">
-        <button type="button" onclick="prevSong()"
-                aria-label="Previous song">⏮</button>
+        <button
+          type="button"
+          onclick="prevSong()"
+          aria-label="Previous song"
+        >⏮</button>
 
-        <button type="button" onclick="playPause()"
-                id="playBtn" aria-label="Play or pause">▶</button>
+        <button
+          type="button"
+          onclick="playPause()"
+          id="playBtn"
+          aria-label="Play or pause"
+        >▶</button>
 
-        <button type="button" onclick="nextSong()"
-                aria-label="Next song">⏭</button>
+        <button
+          type="button"
+          onclick="nextSong()"
+          aria-label="Next song"
+        >⏭</button>
       </div>
     </div>
   `;
 
   modal.classList.remove("hidden");
+
+  // Load and play the first song.
   loadSong();
   playAudio();
 }
@@ -102,9 +132,15 @@ function openMusic() {
 function loadSong() {
   const song = songs[currentSong];
 
-  document.getElementById("title").textContent = song.title;
-  document.getElementById("artist").textContent = song.artist;
-  document.getElementById("cover").src = song.cover;
+  const title = document.getElementById("title");
+  const artist = document.getElementById("artist");
+  const cover = document.getElementById("cover");
+
+  if (!title || !artist || !cover) return;
+
+  title.textContent = song.title;
+  artist.textContent = song.artist;
+  cover.src = song.cover;
 
   audio.src = song.src;
 }
@@ -188,7 +224,6 @@ function opencamera() {
     </div>
   `;
 
-  // Make each photo clickable.
   modalContent.querySelectorAll(".memory-photo").forEach((photo) => {
     photo.addEventListener("click", () => {
       const index = Number(photo.dataset.memoryIndex);
@@ -199,7 +234,6 @@ function opencamera() {
       }
     });
 
-    // Show a message if the photo file cannot be found.
     photo.addEventListener("error", () => {
       photo.alt = `Photo not found: ${photo.getAttribute("src")}`;
       photo.classList.add("photo-missing");
@@ -238,19 +272,16 @@ function viewPicture(src, caption) {
       </p>
     `;
 
-    // Close when the dark background is clicked.
     viewer.addEventListener("click", (event) => {
       if (event.target === viewer) {
         closePictureViewer();
       }
     });
 
-    // Close button.
     viewer.querySelector(".picture-close").addEventListener("click", () => {
       closePictureViewer();
     });
 
-    // Prevent clicking the enlarged image from closing the viewer.
     viewer.querySelector("#viewerImage").addEventListener("click", (event) => {
       event.stopPropagation();
     });
@@ -300,8 +331,8 @@ function openLetter() {
 
         <p>
           From the moment you came into my life,
-        everything became brighter and happier 🌸
-        If I could give you one thing in this world,
+          everything became brighter and happier 🌸
+          If I could give you one thing in this world,
           it would be the chance to see yourself through my eyes.
           Maybe then you'd understand just how special you are to me.
         </p>
@@ -317,7 +348,8 @@ function openLetter() {
           I hope this new chapter brings you countless reasons to smile,
           dreams that come true, and the kind of happiness you truly deserve.
           No matter how busy life gets, I hope you always remember
-          how much you mean to me. I;m always proud of you tel. Balu mu yan.🥺💕
+          how much you mean to me. I'm always proud of you tel.
+          Balu mu yan.🥺💕
         </p>
 
         <p>
@@ -357,7 +389,7 @@ function closeModal() {
   modalContent.innerHTML = "";
 }
 
-// Close the surprise only when clicking the modal backdrop.
+// Close the surprise when the backdrop is clicked.
 if (modal) {
   modal.addEventListener("click", (event) => {
     if (event.target === modal) {
@@ -382,3 +414,122 @@ document.addEventListener("keydown", (event) => {
     closeModal();
   }
 });
+
+/* ========================================
+   FALLING CONFETTI ANIMATION 🎉
+======================================== */
+
+(() => {
+  let canvas = document.getElementById("confettiCanvas");
+
+  // Create the canvas if it doesn't exist in HTML.
+  if (!canvas) {
+    canvas = document.createElement("canvas");
+    canvas.id = "confettiCanvas";
+    document.body.appendChild(canvas);
+  }
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const confettiColors = [
+    "#ff6b9d",
+    "#ffc0cb",
+    "#ffdf70",
+    "#c8a2ff",
+    "#a0e7e5",
+    "#ffffff",
+    "#ff8fab"
+  ];
+
+  let pieces = [];
+  let animationFrame;
+
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function createPiece(randomY = false) {
+    return {
+      x: Math.random() * window.innerWidth,
+      y: randomY
+        ? Math.random() * window.innerHeight
+        : -20 - Math.random() * window.innerHeight * 0.3,
+      size: Math.random() * 7 + 4,
+      speedY: Math.random() * 2 + 1,
+      speedX: Math.random() * 1.6 - 0.8,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.08,
+      color: confettiColors[
+        Math.floor(Math.random() * confettiColors.length)
+      ],
+      shape: Math.random() > 0.5 ? "rect" : "circle",
+      wobble: Math.random() * Math.PI * 2
+    };
+  }
+
+  function startConfetti() {
+    cancelAnimationFrame(animationFrame);
+    resizeCanvas();
+
+    pieces = Array.from({ length: 110 }, () => createPiece(true));
+
+    function animate() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      for (const p of pieces) {
+        p.y += p.speedY;
+        p.x += p.speedX + Math.sin(p.wobble) * 0.5;
+        p.rotation += p.rotationSpeed;
+        p.wobble += 0.025;
+
+        if (p.y > window.innerHeight + 20) {
+          Object.assign(p, createPiece());
+        }
+
+        if (p.x < -20) p.x = window.innerWidth + 20;
+        if (p.x > window.innerWidth + 20) p.x = -20;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.fillStyle = p.color;
+
+        if (p.shape === "rect") {
+          ctx.fillRect(
+            -p.size / 2,
+            -p.size / 3,
+            p.size,
+            p.size * 0.65
+          );
+        } else {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+
+      animationFrame = requestAnimationFrame(animate);
+    }
+
+    animate();
+  }
+
+  // Keep confetti visible above the page background but below modals.
+  canvas.style.position = "fixed";
+  canvas.style.inset = "0";
+  canvas.style.pointerEvents = "none";
+  canvas.style.zIndex = "1000";
+
+  startConfetti();
+  window.addEventListener("resize", resizeCanvas);
+})();
