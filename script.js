@@ -69,6 +69,23 @@ let currentSong = 0;
 const audio = new Audio();
 
 audio.addEventListener("ended", nextSong);
+audio.addEventListener("timeupdate", updateTrackProgress);
+audio.addEventListener("loadedmetadata", updateTrackProgress);
+audio.addEventListener("play", () => { const p = document.querySelector(".music-player"); if (p) p.classList.add("is-playing"); });
+audio.addEventListener("pause", () => { const p = document.querySelector(".music-player"); if (p) p.classList.remove("is-playing"); });
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return "0:00";
+  return `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60).toString().padStart(2, "0")}`;
+}
+function updateTrackProgress() {
+  const seek = document.getElementById("seekBar"), cur = document.getElementById("currentTime"), dur = document.getElementById("duration");
+  if (!seek || !cur || !dur) return;
+  const total = audio.duration || 0;
+  seek.value = total ? audio.currentTime / total * 100 : 0;
+  seek.style.setProperty("--progress", `${seek.value}%`);
+  cur.textContent = formatTime(audio.currentTime); dur.textContent = formatTime(total);
+}
 
 audio.addEventListener("play", () => {
   const btn = document.getElementById("playBtn");
@@ -99,6 +116,12 @@ function openMusic() {
       <h2 id="title"></h2>
       <p id="artist"></p>
 
+      <div class="music-equalizer" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="track-progress">
+        <input id="seekBar" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek through song">
+        <div class="time-row"><span id="currentTime">0:00</span><span id="duration">0:00</span></div>
+      </div>
+
       <div class="controls">
         <button
           type="button"
@@ -123,6 +146,8 @@ function openMusic() {
   `;
 
   modal.classList.remove("hidden");
+  const seek = document.getElementById("seekBar");
+  if (seek) seek.addEventListener("input", () => { if (Number.isFinite(audio.duration)) audio.currentTime = Number(seek.value) / 100 * audio.duration; });
 
   // Load and play the first song.
   loadSong();

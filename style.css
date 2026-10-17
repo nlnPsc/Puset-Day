@@ -1504,3 +1504,129 @@ h2 {
         animation: none;
     }
 }
+
+
+/* =========================================
+   PAGE 1 — BIG, EYE-CATCHING BIRTHDAY CAKE
+   Overrides the original cake sizing safely.
+========================================= */
+#page1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 1.5vh, 20px);
+    padding-top: clamp(18px, 3vh, 34px);
+    padding-bottom: clamp(18px, 3vh, 34px);
+    isolation: isolate;
+}
+
+#page1 h1 {
+    position: relative;
+    z-index: 1;
+    color: #b94f58;
+    text-shadow: 0 3px 0 rgba(255,255,255,.7), 0 8px 20px rgba(181,77,85,.15);
+    margin-bottom: 0;
+}
+
+#page1 .click-text {
+    position: relative;
+    z-index: 1;
+    margin: 4px 0 0;
+    background: linear-gradient(135deg, #fff7f1, #ffe2e6);
+    border: 2px solid rgba(255,255,255,.9);
+    box-shadow: 0 8px 24px rgba(176,82,92,.12);
+    color: #b94f58;
+    font-weight: 600;
+    animation: cakePrompt 2.2s ease-in-out infinite;
+}
+
+#page1 .cake,
+#page1 #openPage2 {
+    position: relative;
+    z-index: 0;
+    display: block;
+    width: clamp(300px, 43vw, 520px);
+    max-width: min(88vw, 520px);
+    height: auto;
+    max-height: 58vh;
+    margin: clamp(4px, 1vh, 14px) auto 0;
+    object-fit: contain;
+    filter:
+        drop-shadow(0 14px 10px rgba(111, 55, 52, .18))
+        drop-shadow(0 0 24px rgba(255, 117, 143, .22));
+    transform-origin: 50% 72%;
+    animation: bigCakeFloat 3.2s ease-in-out infinite;
+    transition: filter .25s ease, transform .25s ease;
+}
+
+#page1 .cake:hover,
+#page1 #openPage2:hover {
+    filter:
+        drop-shadow(0 18px 13px rgba(111, 55, 52, .22))
+        drop-shadow(0 0 34px rgba(255, 105, 145, .5));
+    transform: scale(1.045);
+}
+
+#page1 .cake:active,
+#page1 #openPage2:active {
+    transform: scale(.98);
+}
+
+@keyframes bigCakeFloat {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+@keyframes cakePrompt {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Small screens: keep the cake visually large without pushing the
+   heading or click prompt off-screen. */
+@media (max-width: 600px) {
+    #page1 {
+        gap: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    #page1 .cake,
+    #page1 #openPage2 {
+        width: clamp(260px, 78vw, 390px);
+        max-width: 88vw;
+        max-height: 48vh;
+        margin-top: 4px;
+    }
+
+    #page1 .click-text {
+        margin-top: 2px;
+        margin-bottom: 0;
+        padding: 10px 16px;
+        font-size: clamp(15px, 4vw, 20px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #page1 .cake,
+    #page1 #openPage2,
+    #page1 .click-text {
+        animation: none;
+    }
+}
+
+
+/* AESTHETIC MUSIC PLAYER — soft romantic album-card styling */
+.music-player{position:relative;isolation:isolate;overflow:hidden;width:min(100%,470px);padding:30px clamp(22px,5vw,38px) 32px;color:#754b60;background:radial-gradient(ellipse at 10% 0%,rgba(255,255,255,.95),transparent 42%),radial-gradient(ellipse at 100% 100%,rgba(255,192,213,.72),transparent 45%),linear-gradient(145deg,#fff8f4 0%,#ffe8ed 48%,#f8d8e7 100%);border:1px solid rgba(255,255,255,.88);border-radius:30px;box-shadow:0 24px 70px rgba(143,75,103,.2),inset 0 1px 0 rgba(255,255,255,.95)}
+.music-player:before,.music-player:after{content:"✦";position:absolute;z-index:-1;color:rgba(211,128,162,.25);font-size:42px;animation:musicSparkle 4s ease-in-out infinite}.music-player:before{top:24px;right:25px}.music-player:after{content:"♡";left:20px;bottom:76px;font-size:34px;animation-delay:-2s}
+.music-player .cover{width:clamp(190px,58vw,260px);aspect-ratio:1/1;margin:0 auto 23px;object-fit:cover;border-radius:23px;border:5px solid rgba(255,255,255,.9);box-shadow:0 16px 35px rgba(164,91,125,.24);transition:transform .45s ease,box-shadow .45s ease}
+.music-player.is-playing .cover{transform:translateY(-3px) rotate(-1deg);box-shadow:0 18px 42px rgba(203,104,145,.35)}
+.music-player .music-label{display:inline-block;margin:0 auto 10px;padding:7px 13px;border:1px solid rgba(208,130,160,.25);border-radius:100px;background:rgba(255,255,255,.58);color:#b16d8a;font-size:10px;font-weight:700;letter-spacing:2px}
+.music-player #title{margin:8px 0 5px;color:#75435d;font-family:'Pacifico',cursive;font-size:clamp(25px,5vw,32px);font-weight:400;line-height:1.35}.music-player #artist{margin:0;color:#ad8296;font-size:13px;letter-spacing:1.4px}
+.music-equalizer{height:27px;display:flex;align-items:center;justify-content:center;gap:4px;margin:15px auto 10px;opacity:.55}.music-equalizer span{width:3px;height:4px;border-radius:10px;background:linear-gradient(#e89ab7,#ba7699)}.music-player.is-playing .music-equalizer span{animation:equalize .8s ease-in-out infinite alternate}.music-equalizer span:nth-child(3n){animation-delay:-.5s}.music-equalizer span:nth-child(2n){animation-delay:-.25s}
+.track-progress{width:100%;margin:8px auto 0}#seekBar{--progress:0%;display:block;width:100%;height:5px;margin:0;appearance:none;-webkit-appearance:none;cursor:pointer;border-radius:99px;background:linear-gradient(to right,#c8799c var(--progress),rgba(188,132,157,.22) var(--progress));outline:none}#seekBar::-webkit-slider-thumb{appearance:none;width:12px;height:12px;border-radius:50%;background:#b66c90;border:2px solid #fff;box-shadow:0 2px 7px #b66c9060}#seekBar::-moz-range-thumb{width:9px;height:9px;border-radius:50%;background:#b66c90;border:2px solid #fff}.time-row{display:flex;justify-content:space-between;margin-top:8px;color:#ad8296;font-size:11px;font-variant-numeric:tabular-nums}
+.music-player .controls{gap:22px;margin-top:20px}.music-player .controls button{display:inline-flex;align-items:center;justify-content:center;width:45px;height:45px;min-width:45px;min-height:45px;padding:0;border:1px solid rgba(255,255,255,.85);border-radius:50%;color:#9c6380;background:rgba(255,255,255,.65);box-shadow:0 5px 14px rgba(161,91,124,.09);font-size:17px;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}.music-player .controls button:hover{transform:translateY(-3px) scale(1.06);background:#fff;box-shadow:0 8px 20px rgba(161,91,124,.16)}.music-player .controls #playBtn{width:62px;height:62px;min-width:62px;min-height:62px;background:linear-gradient(145deg,#d78aaa,#b9688d);color:#fff;border:3px solid rgba(255,255,255,.88);font-size:22px;box-shadow:0 9px 22px rgba(180,99,140,.35)}
+@keyframes equalize{from{height:4px}to{height:25px}}@keyframes musicSparkle{0%,100%{opacity:.45;transform:scale(.9) rotate(0)}50%{opacity:.9;transform:scale(1.12) rotate(12deg)}}
+@media(max-width:480px){.music-player{padding:26px 22px 28px;border-radius:25px}.music-player .cover{width:min(66vw,230px)}.music-player .controls{gap:17px}}
+@media(prefers-reduced-motion:reduce){.music-player:before,.music-player:after,.music-player.is-playing .music-equalizer span{animation:none}.music-player .cover,.music-player .controls button{transition:none}}
